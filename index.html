@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyraSense – AI Menstrual Health & Wellness</title>
+  <meta name="description" content="CyraSense: Your AI-powered menstrual health and wellness companion." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/additions.css" />
+</head>
+<body>
+
+  <!-- ========== SPLASH SCREEN ========== -->
+  <div id="splash-screen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="38" fill="url(#lg1)" opacity="0.15"/>
+            <path d="M40 12C40 12 22 24 22 40C22 50.5 30 58 40 62C50 58 58 50.5 58 40C58 24 40 12 40 12Z" fill="url(#lg1)"/>
+            <path d="M40 24C40 24 30 32 30 42C30 48 34.5 52 40 54C45.5 52 50 48 50 42C50 32 40 24 40 24Z" fill="white" opacity="0.9"/>
+            <path d="M40 34C40 34 35 38 35 43C35 46 37.2 48.5 40 49.5C42.8 48.5 45 46 45 43C45 38 40 34 40 34Z" fill="url(#lg1)"/>
+            <defs>
+              <linearGradient id="lg1" x1="22" y1="12" x2="58" y2="62" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#c084fc"/><stop offset="1" stop-color="#f472b6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h1 class="splash-title">CyraSense</h1>
+        <p class="splash-tagline">Your AI Wellness Companion</p>
+      </div>
+      <div class="splash-loader"><div class="loader-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- ========== AUTH PAGE ========== -->
+  <div id="auth-page" class="page hidden">
+    <div class="auth-bg">
+      <div class="auth-blob blob1"></div>
+      <div class="auth-blob blob2"></div>
+      <div class="auth-blob blob3"></div>
+    </div>
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="logo-icon-sm">
+          <svg viewBox="0 0 80 80" fill="none">
+            <path d="M40 12C40 12 22 24 22 40C22 50.5 30 58 40 62C50 58 58 50.5 58 40C58 24 40 12 40 12Z" fill="url(#lg2)"/>
+            <path d="M40 24C40 24 30 32 30 42C30 48 34.5 52 40 54C45.5 52 50 48 50 42C50 32 40 24 40 24Z" fill="white" opacity="0.9"/>
+            <path d="M40 34C40 34 35 38 35 43C35 46 37.2 48.5 40 49.5C42.8 48.5 45 46 45 43C45 38 40 34 40 34Z" fill="url(#lg2)"/>
+            <defs>
+              <linearGradient id="lg2" x1="22" y1="12" x2="58" y2="62" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#c084fc"/><stop offset="1" stop-color="#f472b6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span>CyraSense</span>
+      </div>
+
+      <div class="auth-card glass-card">
+        <div class="auth-tabs">
+          <button id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+          <button id="tab-signup" class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="login-username" placeholder="Enter your username" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Age</label>
+              <input type="number" id="login-age" placeholder="24" required />
+            </div>
+            <div class="form-group">
+              <label>Height (cm)</label>
+              <input type="number" id="login-height" placeholder="165" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Weight (kg)</label>
+            <input type="number" id="login-weight" placeholder="60" required />
+          </div>
+          <button type="submit" class="btn-primary btn-full">Get Started 🌸</button>
+        </form>
+      </div>
+      <p class="privacy-note">🔒 Your data is secure and not shared</p>
+    </div>
+  </div>
+
+  <!-- ========== MAIN APP ========== -->
+  <div id="main-app" class="hidden">
+
+    <!-- Bottom Navigation (7 items) -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-item active" id="nav-home" onclick="navigateTo('dashboard')">
+        <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+      </button>
+      <button class="nav-item" id="nav-calendar" onclick="navigateTo('calendar')">
+        <span class="nav-icon">📅</span><span class="nav-label">Calendar</span>
+      </button>
+      <button class="nav-item" id="nav-chatbot" onclick="navigateTo('chatbot')">
+        <span class="nav-icon">🤖</span><span class="nav-label">AI Chat</span>
+      </button>
+      <button class="nav-item" id="nav-games" onclick="navigateTo('games')">
+        <span class="nav-icon">🎮</span><span class="nav-label">Games</span>
+      </button>
+      <button class="nav-item" id="nav-yoga" onclick="navigateTo('yoga')">
+        <span class="nav-icon">🧘</span><span class="nav-label">Yoga</span>
+      </button>
+      <button class="nav-item" id="nav-store" onclick="navigateTo('store')">
+        <span class="nav-icon">🛍️</span><span class="nav-label">Store</span>
+      </button>
+      <button class="nav-item" id="nav-settings" onclick="navigateTo('settings')">
+        <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+      </button>
+    </nav>
+
+    <div class="pages-container">
+
+      <!-- ===== DASHBOARD PAGE ===== -->
+      <div id="dashboard-page" class="app-page active">
+        <div class="page-header">
+          <div>
+            <p class="greeting-sub">Good morning 🌸</p>
+            <h2 class="greeting-main" id="greeting-name">Hello, welcome to CyraSense</h2>
+          </div>
+          <div class="header-right">
+            <div class="coins-badge" id="coins-display">
+              <span>🪙</span><span id="coin-count">0</span>
+            </div>
+            <button class="btn-icon" onclick="navigateTo('settings')" title="Settings">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="cycle-summary glass-card">
+          <div class="cycle-info">
+            <div class="cycle-stat">
+              <span class="cycle-num" id="cycle-day">12</span>
+              <span class="cycle-label">Cycle Day</span>
+            </div>
+            <div class="cycle-divider"></div>
+            <div class="cycle-stat">
+              <span class="cycle-num" id="days-until">16</span>
+              <span class="cycle-label">Days Until Next</span>
+            </div>
+            <div class="cycle-divider"></div>
+            <div class="cycle-stat">
+              <span class="cycle-num phase-text" id="current-phase">Follicular</span>
+              <span class="cycle-label">Current Phase</span>
+            </div>
+            <div class="cycle-divider"></div>
+            <div class="cycle-stat">
+              <span class="cycle-num" id="ovulation-indicator" style="font-size: 1rem; color: var(--accent);">🌸 —</span>
+              <span class="cycle-label">Ovulation Day</span>
+            </div>
+          </div>
+          <div class="cycle-bar">
+            <div class="cycle-progress" id="cycle-progress" style="width:40%"></div>
+          </div>
+        </div>
+
+        <div class="quick-log glass-card">
+          <h3>Quick Log Today</h3>
+          <div class="log-row">
+            <div class="log-item">
+              <span class="log-label">Pain Level</span>
+              <div class="slider-wrap">
+                <input type="range" id="pain-slider" min="0" max="10" value="3" oninput="updatePainDisplay(this.value)" />
+                <span class="slider-val" id="pain-val">3</span>
+              </div>
+            </div>
+            <div class="log-item">
+              <span class="log-label">Mood</span>
+              <div class="mood-btns">
+                <button class="mood-btn active" data-mood="😊" onclick="selectMood(this)">😊</button>
+                <button class="mood-btn" data-mood="😐" onclick="selectMood(this)">😐</button>
+                <button class="mood-btn" data-mood="😢" onclick="selectMood(this)">😢</button>
+                <button class="mood-btn" data-mood="😤" onclick="selectMood(this)">😤</button>
+                <button class="mood-btn" data-mood="🥱" onclick="selectMood(this)">🥱</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="saveLog()">Save Today's Log 📝</button>
+        </div>
+
+        <div class="charts-section">
+          <div class="chart-card glass-card">
+            <h3>Pain Level — Last 7 Days</h3>
+            <canvas id="pain-chart" height="120"></canvas>
+          </div>
+          <div class="chart-card glass-card">
+            <h3>Mood Tracking — Weekly</h3>
+            <canvas id="mood-chart" height="120"></canvas>
+          </div>
+        </div>
+
+        <div class="insights-row">
+          <div class="insight-card glass-card">
+            <span class="insight-icon">💧</span>
+            <div>
+              <p class="insight-title">Hydration Tip</p>
+              <p class="insight-text">Drink 8+ glasses of water today to reduce bloating.</p>
+            </div>
+          </div>
+          <div class="insight-card glass-card">
+            <span class="insight-icon">🌙</span>
+            <div>
+              <p class="insight-title">Sleep Goal</p>
+              <p class="insight-text">Aim for 7-9 hours. Your cycle benefits from rest.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RISK ANALYSIS SECTION -->
+        <div class="risk-analysis glass-card" style="margin-top:20px;">
+          <div class="risk-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="margin:0;">🧠 Early Risk Analysis</h3>
+            <span class="risk-badge" id="risk-status" style="padding:4px 12px; border-radius:20px; font-weight:600; font-size:0.8rem; background:rgba(244,114,182,0.2); color:#f472b6;">Low Risk</span>
+          </div>
+          <div class="risk-analysis-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:15px;">
+            <div class="risk-chart-card glass-card">
+              <h4 style="font-size:0.8rem; color:var(--text-dim); margin-bottom:10px;">PCOS Markers</h4>
+              <canvas id="pcosChart" height="120"></canvas>
+            </div>
+            <div class="risk-chart-card glass-card">
+              <h4 style="font-size:0.8rem; color:var(--text-dim); margin-bottom:10px;">PMS Intensity</h4>
+              <canvas id="pmsChart" height="120"></canvas>
+            </div>
+          </div>
+          <p id="risk-detail" style="font-size:0.85rem; color:var(--text-muted); margin-top:12px; line-height:1.5;">Your cycle patterns look healthy based on current data. Keep logging to see more insights!</p>
+          <div class="risk-indicators" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+            <div class="risk-item" style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; text-align:center;">
+              <span class="risk-label" style="display:block; font-size:0.75rem; color:var(--text-dim);">PCOS Indicator</span>
+              <span class="risk-val" id="risk-pcos" style="font-weight:600; color:var(--text-main);">Low</span>
+            </div>
+            <div class="risk-item" style="background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; text-align:center;">
+              <span class="risk-label" style="display:block; font-size:0.75rem; color:var(--text-dim);">PMS Severity</span>
+              <span class="risk-val" id="risk-pms" style="font-weight:600; color:var(--text-main);">Normal</span>
+            </div>
+          </div>
+          <p class="risk-disclaimer" style="font-size:0.75rem; color:var(--text-dim); font-style:italic;">⚠️ Disclaimer: This is an AI-generated analysis for awareness only. Please consult a doctor for medical diagnosis.</p>
+        </div>
+      </div>
+
+      <!-- ===== CALENDAR PAGE ===== -->
+      <div id="calendar-page" class="app-page hidden">
+        <div class="page-header">
+          <h2 class="page-title">Cycle Calendar 📅</h2>
+        </div>
+
+        <div class="calendar-wrapper glass-card">
+          <div class="cal-controls" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:15px;">
+            <div>
+              <label style="font-size:0.75rem; color:var(--text-dim); display:block; margin-bottom:4px;">Last Period Start</label>
+              <input type="date" id="first-period-date" style="background:rgba(255,255,255,0.08); border:none; color:white; padding:8px; border-radius:10px; width:100%; font-size:0.85rem;" onchange="updatePeriodPrediction()" />
+            </div>
+            <div>
+              <label style="font-size:0.75rem; color:var(--text-dim); display:block; margin-bottom:4px;">Current Period Start</label>
+              <input type="date" id="current-period-date" style="background:rgba(255,255,255,0.08); border:none; color:white; padding:8px; border-radius:10px; width:100%; font-size:0.85rem;" onchange="saveCurrentPeriod()" />
+            </div>
+          </div>
+          <div class="cal-header">
+            <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+            <h3 id="cal-month-year">April 2026</h3>
+            <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+          </div>
+          <div class="cal-grid-header">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <div><span class="legend-dot period"></span>Period</div>
+            <div><span class="legend-dot predicted"></span>Predicted</div>
+            <div><span class="legend-dot symptom"></span>Symptom</div>
+            <div><span class="legend-dot mood-marked"></span>Mood</div>
+          </div>
+          <div id="period-history" class="glass-card" style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.03);">
+            <h4 style="font-size:0.9rem; margin-bottom:10px;">📜 Period History</h4>
+            <ul id="period-history-list" style="font-size:0.8rem; color:var(--text-muted); list-style:none; padding:0; display:flex; flex-direction:column; gap:8px;">
+              <li>No history recorded yet.</li>
+            </ul>
+          </div>
+          <div id="prediction-label" class="prediction-info" style="margin-top:15px; padding:12px; background:rgba(244,114,182,0.1); border-radius:12px; color:#f472b6; font-weight:600; text-align:center; display:none;">
+            Your next period may occur around <span id="predicted-date">2024-01-01</span>
+          </div>
+        </div>
+
+        <!-- CYCLE GRAPH -->
+        <div class="glass-card" style="margin-bottom:16px;">
+          <h3 style="font-size:0.95rem;color:var(--text-muted);margin-bottom:14px;">📊 Pain & Mood — Last 14 Days</h3>
+          <canvas id="cycle-graph-canvas" height="140"></canvas>
+        </div>
+
+        <div id="day-detail-panel" class="day-detail glass-card hidden">
+          <h3>📋 Log for <span id="selected-date-label"></span></h3>
+          <div class="detail-options">
+            <label class="toggle-option">
+              <input type="checkbox" id="mark-period" onchange="saveCalendarMark('period')"> 🩸 Period Day
+            </label>
+            <label class="toggle-option">
+              <input type="checkbox" id="mark-symptom" onchange="saveCalendarMark('symptom')"> 🤒 Symptom
+            </label>
+            <label class="toggle-option">
+              <input type="checkbox" id="mark-mood" onchange="saveCalendarMark('mood')"> 😊 Good Mood
+            </label>
+          </div>
+          <input type="text" id="symptom-note" placeholder="Note symptoms here…" class="note-input" />
+          <button class="btn-primary" onclick="saveDayNote()">Save Note</button>
+        </div>
+
+        <div class="symptoms-log glass-card">
+          <h3>Symptom Tags</h3>
+          <div class="symptom-tags">
+            <button class="sym-tag" onclick="tagSymptom(this, 'cramps')">🩸 Cramps</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'headache')">🤕 Headache</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'bloating')">🫃 Bloating</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'fatigue')">😴 Fatigue</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'mood-swings')">🌪️ Mood Swings</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'nausea')">🤢 Nausea</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'backpain')">🔙 Back Pain</button>
+            <button class="sym-tag" onclick="tagSymptom(this, 'spotting')">💧 Spotting</button>
+          </div>
+          <p class="sym-selected" id="sym-selected-list">No symptoms selected</p>
+        </div>
+      </div>
+
+      <!-- ===== CHATBOT PAGE ===== -->
+      <div id="chatbot-page" class="app-page hidden">
+        <div class="page-header">
+          <h2 class="page-title">AI Health Chat 🤖</h2>
+          <button class="btn-icon" onclick="clearChat()">🗑️</button>
+        </div>
+        <div class="chat-container" id="chat-messages">
+          <div class="chat-msg bot">
+            <div class="chat-avatar">🌸</div>
+            <div class="chat-bubble">Hi! I'm CyraBot 🌸 — your health assistant. Ask me about cramps, PMS, PCOS, diet, mood, and more!</div>
+          </div>
+        </div>
+        <div class="quick-questions">
+          <button class="quick-q" onclick="sendQuickQ('What helps with period cramps?')">🩸 Period Cramps</button>
+          <button class="quick-q" onclick="sendQuickQ('What are PCOS symptoms?')">🔬 PCOS Signs</button>
+          <button class="quick-q" onclick="sendQuickQ('Best foods during period?')">🥗 Period Diet</button>
+          <button class="quick-q" onclick="sendQuickQ('How to manage PMS?')">💊 PMS Relief</button>
+          <button class="quick-q" onclick="sendQuickQ('What helps with bloating?')">🫃 Bloating</button>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chat-input" placeholder="Ask about your health…" onkeydown="if(event.key==='Enter') sendMessage()" />
+          <button class="send-btn" onclick="sendMessage()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== GAMES PAGE ===== -->
+      <div id="games-page" class="app-page hidden">
+        <div class="page-header">
+          <h2 class="page-title">Wellness Games 🎮</h2>
+          <div class="coins-badge">🪙 <span id="games-coin-count">0</span></div>
+        </div>
+
+        <div id="games-menu">
+          <div class="game-cards-row">
+            <!-- HORMONE BALANCE -->
+            <div class="game-select-card glass-card" onclick="startHormoneGame()">
+              <div class="game-card-emoji">⚖️</div>
+              <h3>Hormone Balance</h3>
+              <p>Catch healthy items and avoid toxins to balance your hormones!</p>
+              <div class="game-badge">🪙 Earn up to 50 coins</div>
+              <button class="btn-primary">Play Now!</button>
+            </div>
+            <!-- MEMORY MATCH -->
+            <div class="game-select-card glass-card" onclick="startMemoryGame()">
+              <div class="game-card-emoji">🃏</div>
+              <h3>Memory Wellness</h3>
+              <p>Match wellness icons to sharpen your mind!</p>
+              <div class="game-badge">🪙 Earn up to 40 coins</div>
+              <button class="btn-primary">Play Now!</button>
+            </div>
+            <!-- CYCLE CARE CHALLENGE -->
+            <div class="game-select-card glass-card" onclick="startCycleCareGame()">
+              <div class="game-card-emoji">🌿</div>
+              <h3>Cycle Care Challenge</h3>
+              <p>Choose the best habits for each phase of your cycle!</p>
+              <div class="game-badge">🪙 Earn up to 40 coins</div>
+              <button class="btn-primary">Play Now!</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HORMONE BALANCE GAME -->
+        <div id="hormone-game" class="game-panel hidden" style="position:relative; overflow:hidden; min-height:450px; background:linear-gradient(to bottom, #1a1030, #2d1b4d);">
+          <div class="game-ui-bar">
+            <button class="btn-back" onclick="exitGame('hormone')">← Back</button>
+            <span class="game-score-label">Score: <strong id="hormone-score">0</strong></span>
+            <span class="game-score-label">❤️ <strong id="hormone-lives">3</strong></span>
+            <span class="game-score-label">🪙 <strong id="hormone-coins">0</strong></span>
+          </div>
+          <div id="hormone-arena" style="position:relative; height:400px; width:100%;">
+            <div id="hormone-player" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); font-size:2.5rem; cursor:pointer; transition: left 0.1s;">🧘</div>
+          </div>
+          <div id="hormone-over" class="game-over-overlay hidden">
+            <h2 id="hormone-msg">Game Over! ⚖️</h2>
+            <p>Balanced Score: <span id="hormone-final-score">0</span></p>
+            <p>Coins Earned: <span id="hormone-coins-earned">🪙 0</span></p>
+            <div class="game-over-btns">
+              <button class="btn-primary" onclick="restartHormoneGame()">Play Again</button>
+              <button class="btn-primary" style="background:linear-gradient(135deg, #c084fc, #f472b6);" onclick="navigateTo('yoga')">🧘 Flow to Yoga</button>
+              <button class="btn-secondary" onclick="exitGame('hormone')">Back to Games</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MEMORY MATCH GAME -->
+        <div id="memory-game" class="game-panel hidden">
+          <div class="game-ui-bar">
+            <button class="btn-back" onclick="exitGame('memory')">← Back</button>
+            <span class="game-score-label">Score: <strong id="memory-score">0</strong></span>
+            <span class="game-score-label">⏱ <strong id="memory-timer">60</strong>s</span>
+          </div>
+          <div id="memory-grid" class="memory-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:20px;"></div>
+          <div id="memory-over" class="game-over-overlay hidden">
+            <h2 id="memory-won-msg">Game Over! 🃏</h2>
+            <p>Score: <span id="memory-final-score">0</span></p>
+            <p>Coins Earned: <span id="memory-coins-earned">🪙 0</span></p>
+            <div class="game-over-btns">
+              <button class="btn-primary" onclick="restartMemoryGame()">Play Again</button>
+              <button class="btn-primary" style="background:linear-gradient(135deg, #c084fc, #f472b6);" onclick="navigateTo('yoga')">🧘 Flow to Yoga</button>
+              <button class="btn-secondary" onclick="exitGame('memory')">Back to Games</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CYCLE CARE GAME -->
+        <div id="cycle-care-game" class="game-panel hidden">
+          <div class="game-ui-bar">
+            <button class="btn-back" onclick="exitGame('cycle-care')">← Back</button>
+            <span class="game-score-label">Correct: <strong id="cycle-care-score">0/5</strong></span>
+          </div>
+          <div class="cycle-care-container glass-card" style="margin:20px; text-align:center; padding:30px;">
+            <div id="cycle-phase-display" style="font-size:1.2rem; color:#f472b6; font-weight:700; margin-bottom:10px;">Phase: Luteal</div>
+            <p id="cycle-question" style="margin-bottom:20px;">Which habit is best for this phase?</p>
+            <div id="cycle-options" style="display:grid; gap:10px;">
+              <!-- Options dynamic -->
+            </div>
+          </div>
+          <div id="cycle-care-over" class="game-over-overlay hidden">
+            <h2>Challenge Complete! 🌿</h2>
+            <p>Score: <span id="cycle-care-final-score">0/5</span></p>
+            <p>Coins Earned: <span id="cycle-care-coins-earned">🪙 0</span></p>
+            <div class="game-over-btns">
+              <button class="btn-primary" onclick="restartCycleCareGame()">Play Again</button>
+              <button class="btn-primary" style="background:linear-gradient(135deg, #c084fc, #f472b6);" onclick="navigateTo('yoga')">🧘 Flow to Yoga</button>
+              <button class="btn-secondary" onclick="exitGame('cycle-care')">Back to Games</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ===== YOGA PAGE ===== -->
+      <div id="yoga-page" class="app-page hidden">
+        <div class="page-header">
+          <h2 class="page-title">Yoga & Flow 🧘</h2>
+        </div>
+        <div class="yoga-intro glass-card" style="margin-bottom:20px; padding:20px; text-align:center;">
+          <p style="color:var(--text-muted); line-height:1.6;">Gentle movement and breathing to support your cycle and ease common symptoms like cramps, stress, and fatigue.</p>
+        </div>
+        <div class="yoga-grid" id="yoga-grid">
+          <!-- Dynamically Rendered -->
+        </div>
+      </div>
+
+      <!-- ===== STORE PAGE ===== -->
+      <div id="store-page" class="app-page hidden">
+        <div class="page-header">
+          <h2 class="page-title">Wellness Store 🛍️</h2>
+          <div class="coins-badge">🪙 <span id="store-coin-count">0</span></div>
+        </div>
+        <div class="coin-info glass-card">
+          <p>💡 <strong>500 coins = ₹5 discount</strong> — Play games to earn coins and save!</p>
+        </div>
+        <div class="store-grid" id="store-grid"></div>
+        <div class="cart-summary glass-card hidden" id="cart-summary">
+          <h3>🛒 Your Cart</h3>
+          <div id="cart-items"></div>
+          <div class="cart-total">
+            <span>Total: <strong id="cart-total-price">₹0</strong></span>
+            <span class="coin-discount" id="coin-discount-info"></span>
+          </div>
+          <button class="btn-primary" onclick="checkout()">Checkout (Demo) 🛍️</button>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS PAGE ===== -->
+      <div id="settings-page" class="app-page hidden">
+        <div class="page-header">
+          <h2 class="page-title">Settings ⚙️</h2>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="settings-profile glass-card">
+          <div class="settings-avatar">
+            <span>👤</span>
+          </div>
+          <div class="settings-profile-info">
+            <h3 id="settings-name" class="settings-username">—</h3>
+            <p id="settings-email" class="settings-email-text">—</p>
+            <div class="coins-badge" style="display:inline-flex;margin-top:8px;">
+              <span id="settings-coins">🪙 0</span>
+            </div>
+          </div>
+          <button class="btn-icon" onclick="editProfile()" title="Edit Name">✏️</button>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="settings-grid">
+          <div class="settings-info-card glass-card">
+            <span class="settings-info-icon">🎂</span>
+            <div>
+              <p class="settings-info-label">Date of Birth</p>
+              <p class="settings-info-val" id="settings-dob">—</p>
+            </div>
+          </div>
+          <div class="settings-info-card glass-card">
+            <span class="settings-info-icon">📏</span>
+            <div>
+              <p class="settings-info-label">Height</p>
+              <p class="settings-info-val" id="settings-height">—</p>
+            </div>
+          </div>
+          <div class="settings-info-card glass-card">
+            <span class="settings-info-icon">⚖️</span>
+            <div>
+              <p class="settings-info-label">Weight</p>
+              <p class="settings-info-val" id="settings-weight">—</p>
+            </div>
+          </div>
+          <div class="settings-info-card glass-card">
+            <span class="settings-info-icon">💪</span>
+            <div>
+              <p class="settings-info-label">BMI</p>
+              <p class="settings-info-val" id="settings-bmi">—</p>
+            </div>
+          </div>
+          <div class="settings-info-card glass-card">
+            <span class="settings-info-icon">📅</span>
+            <div>
+              <p class="settings-info-label">Member Since</p>
+              <p class="settings-info-val" id="settings-joined">—</p>
+            </div>
+          </div>
+          <div class="settings-info-card glass-card">
+            <span class="settings-info-icon">🪙</span>
+            <div>
+              <p class="settings-info-label">Total Coins</p>
+              <p class="settings-info-val" id="settings-coins-card">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="settings-privacy glass-card">
+          <h3>🔒 Privacy & Security</h3>
+          <p>Your data is encrypted and stored <strong>only on this device</strong>. CyraSense does not share any personal information with third parties.</p>
+          <div class="privacy-badges">
+            <span class="privacy-badge">🔐 Local Storage</span>
+            <span class="privacy-badge">🚫 No Tracking</span>
+            <span class="privacy-badge">✅ GDPR Safe</span>
+          </div>
+        </div>
+
+        <!-- App Info -->
+        <div class="settings-about glass-card">
+          <h3>About CyraSense</h3>
+          <p>Version 2.0 · AI-powered menstrual health platform</p>
+          <p style="margin-top:6px;color:var(--text-dim);font-size:0.82rem;">Built with ❤️ for women's wellness</p>
+        </div>
+
+        <!-- Logout -->
+        <button class="btn-logout" onclick="handleLogout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sign Out
+        </button>
+      </div>
+
+    </div><!-- /pages-container -->
+  </div><!-- /main-app -->
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/yoga.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
